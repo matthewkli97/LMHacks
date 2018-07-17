@@ -5,8 +5,6 @@ import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.database.*
 import com.google.firebase.ml.vision.label.FirebaseVisionLabel
-import com.google.firebase.storage.FirebaseStorage
-
 
 object Libby {
     val dbRef =  FirebaseDatabase.getInstance().reference
