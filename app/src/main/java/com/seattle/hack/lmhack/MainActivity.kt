@@ -58,10 +58,10 @@ class MainActivity : Activity() {
 
         reference = FirebaseDatabase.getInstance().reference.child("chats")
         chatListener = reference!!.addChildEventListener(object : ChildEventListener {
-            override fun onChildMoved(p0: DataSnapshot?, p1: String?) {}
-            override fun onChildChanged(p0: DataSnapshot?, p1: String?) {}
-            override fun onChildRemoved(p0: DataSnapshot?) {}
-            override fun onCancelled(p0: DatabaseError?) {}
+            override fun onCancelled(p0: DatabaseError) {}
+            override fun onChildMoved(p0: DataSnapshot, p1: String?) {}
+            override fun onChildChanged(p0: DataSnapshot, p1: String?) {}
+            override fun onChildRemoved(p0: DataSnapshot) {}
 
             override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
                 val model = dataSnapshot.getValue(Message::class.java)
@@ -96,7 +96,7 @@ class MainActivity : Activity() {
             temp.put("text", message)
 
             val key = FirebaseDatabase.getInstance().getReference().child("chats").push().key
-            FirebaseDatabase.getInstance().getReference().child("chats").child(key).setValue(temp)
+            FirebaseDatabase.getInstance().getReference().child("chats").child(key!!).setValue(temp)
                     .addOnSuccessListener(OnSuccessListener<Void> {
                         Log.i("MessageActivity", "Success")
                     })
@@ -192,34 +192,34 @@ class MainActivity : Activity() {
 
         val data = FirebaseStorage.getInstance()
         var value = 0.0
-        var storage = data.getReference().child("mypic.jpg").putFile(filePath)
+        val key = FirebaseDatabase.getInstance().getReference().child("chats").push().key
+
+        var storage = data.getReference().child("pictures").child(key!!).putFile(filePath)
                 .addOnProgressListener { taskSnapshot ->
                     value = (100.0 * taskSnapshot.bytesTransferred) / taskSnapshot.totalByteCount
                     Log.v("value","value=="+value)
                     progress.setMessage("Uploaded.. " + value.toInt() + "%")
                 }
                 .addOnSuccessListener { taskSnapshot -> progress.dismiss()
-                    val uri = taskSnapshot.downloadUrl
-                    Log.v("Download File","File.." +uri);
+                    val urlRef = data.getReference().child("pictures").child(key!!).downloadUrl.addOnSuccessListener {it ->
+                        var temp = mutableMapOf<Any, Any>();
 
-                    var temp = mutableMapOf<Any, Any>();
+                        temp.put("libby", false)
+                        temp.put("image", true)
+                        temp.put("time", ServerValue.TIMESTAMP)
+                        temp.put("text", it.toString())
 
-                    temp.put("libby", false)
-                    temp.put("image", true)
-                    temp.put("time", ServerValue.TIMESTAMP)
-                    temp.put("text", uri.toString())
+                        FirebaseDatabase.getInstance().getReference().child("chats").child(key!!).setValue(temp)
+                                .addOnSuccessListener(OnSuccessListener<Void> {
+                                    Log.i("MessageActivity", "Success")
+                                })
+                                .addOnFailureListener(OnFailureListener {
+                                    Log.i("MessageActivity", "Failure")
+                                })
 
-                    val key = FirebaseDatabase.getInstance().getReference().child("chats").push().key
-                    FirebaseDatabase.getInstance().getReference().child("chats").child(key).setValue(temp)
-                            .addOnSuccessListener(OnSuccessListener<Void> {
-                                Log.i("MessageActivity", "Success")
-                            })
-                            .addOnFailureListener(OnFailureListener {
-                                Log.i("MessageActivity", "Failure")
-                            })
 
-                    mMessageRecyclerView.postDelayed(Runnable { mMessageRecyclerView.scrollToPosition(mChats!!.size - 1) }, 100)
-
+                        mMessageRecyclerView.postDelayed(Runnable { mMessageRecyclerView.scrollToPosition(mChats!!.size - 1) }, 100)
+                    }
                 }
                 .addOnFailureListener{
                     exception -> exception.printStackTrace()

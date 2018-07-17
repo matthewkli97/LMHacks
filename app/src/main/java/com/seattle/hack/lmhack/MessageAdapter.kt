@@ -13,6 +13,9 @@ import java.text.DateFormat.getTimeInstance
 import java.util.*
 import com.bumptech.glide.load.resource.bitmap.TransformationUtils.centerCrop
 import com.bumptech.glide.request.RequestOptions
+import android.graphics.Bitmap
+
+
 
 
 
@@ -82,6 +85,9 @@ class MessageAdapter(private val myDataset: ArrayList<Message>, var context: Con
                     .load(myDataset[position].text)
                     .apply(options)
                     .into(imageHolder);
+
+            val theBitmap = Glide.with(this.context).load(myDataset[position].text).into(-1, -1)
+            Log.i("asd", theBitmap.toString())
 
 
             val maxSize = imageHolder.getWidth();
