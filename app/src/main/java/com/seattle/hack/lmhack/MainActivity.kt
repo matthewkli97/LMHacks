@@ -21,7 +21,9 @@ import android.support.annotation.NonNull
 import android.support.v4.content.ContextCompat
 import android.view.View
 import android.widget.*
+import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
+import com.google.firebase.ml.vision.label.FirebaseVisionLabelDetector
 import com.google.firebase.storage.FirebaseStorage
 import java.io.File
 import com.google.firebase.storage.StorageReference
@@ -177,12 +179,42 @@ class MainActivity : Activity() {
         }
         when (requestCode){
             PICK_IMAGE_REQUEST -> {
-                uploadFile(data!!.getData())
+                processFile(data!!.getData())
             }
         }
     }
 
-    private fun uploadFile(filePath:Uri) {
+    private fun processFile(filePath: Uri) {
+        uploadImage(filePath)
+        labelImage(filePath)
+    }
+
+    private fun labelImage(filePath:Uri) {
+        var image:FirebaseVisionImage
+        try {
+            image = FirebaseVisionImage.fromFilePath(this, filePath);
+
+            val detector = FirebaseVision.getInstance().getVisionLabelDetector();
+
+            var result = detector.detectInImage(image)
+                    .addOnSuccessListener {labels ->
+                        labels.forEach({
+                            var text = it.getLabel();
+                            var entityId = it.getEntityId();
+                            var confidence = it.getConfidence();
+
+                            Log.i("imageLabel", text)
+                            Log.i("imageLabel", entityId)
+                            Log.i("imageLabel", confidence.toString())
+                        })
+                    }
+                    .addOnFailureListener{}
+        } catch (e:IOException) {
+            e.printStackTrace();
+        }
+    }
+
+    private fun uploadImage(filePath:Uri) {
         val progress = ProgressDialog(this).apply {
             setTitle("Uploading Picture....")
             setCancelable(false)
@@ -226,13 +258,5 @@ class MainActivity : Activity() {
 
                     Toast.makeText(this, "Upload Failed", Toast.LENGTH_SHORT).show()
                 }
-
-        var image:FirebaseVisionImage
-        try {
-            image = FirebaseVisionImage.fromFilePath(this, filePath);
-        } catch (e:IOException) {
-            e.printStackTrace();
-        }
     }
-
 }

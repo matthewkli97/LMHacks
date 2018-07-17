@@ -85,8 +85,6 @@ class MessageAdapter(private val myDataset: ArrayList<Message>, var context: Con
                     .load(myDataset[position].text)
                     .apply(options)
                     .into(imageHolder);
-
-            val theBitmap = Glide.with(this.context).load(myDataset[position].text).into(-1, -1)
         }
 
         val time = holder.view.findViewById(R.id.text_message_time) as TextView
