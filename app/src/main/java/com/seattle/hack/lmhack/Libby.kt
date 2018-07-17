@@ -49,7 +49,13 @@ object Libby {
     }
 
     fun runDialog() {
-        sendLibbyMessage(claimFlow.get(index));
+
+        if(claimFlow.get(index).contains("http")) {
+            sendLibbyImageMessage(claimFlow.get(index));
+        } else {
+            sendLibbyMessage(claimFlow.get(index));
+        }
+        
         index++;
 
         if(index >= claimFlow.size) {
@@ -65,7 +71,8 @@ object Libby {
         claimFlow = prepClaimFlowDialog(tempRef)
         inClaimFlow = true
         inInitFlow = false;
-        
+
+        sendLibbyMessage("Create a claim for " + labels.get(0).label.toString() + "?")
     }
 
     fun processText(text:String) {
@@ -113,7 +120,6 @@ object Libby {
 
             override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
                 dialogs.add(dataSnapshot.child("text").value.toString())
-                Log.i("asdf", dataSnapshot.toString())
             }
         })
 
