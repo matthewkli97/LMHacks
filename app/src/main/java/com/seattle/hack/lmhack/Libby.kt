@@ -13,19 +13,21 @@ object Libby {
     var inClaimFlow:Boolean
     var convoRef = dbRef
     var claimFlow: List<String> = mutableListOf()
+    var index = 0;
 
     init {
         inClaimFlow = false
     }
 
     fun processImageLabels(labels: List<FirebaseVisionLabel>) {
-        val label = labels[0].label
-        val confidence = labels[0].confidence
 
-        convoRef = dbRef.child("label").child(label)
+        if(inClaimFlow) {
+            runDialog()
+        } else {
+            val label = labels[0].label
 
-        inClaimFlow = true
-
+            convoRef = dbRef.child("label").child(label)
+        }
     }
 
     fun sendLibbyMessage(text:String) {
@@ -49,7 +51,8 @@ object Libby {
     }
 
     fun runDialog() {
-        
+        sendLibbyMessage(claimFlow.get(index));
+        index++;
     }
 
     fun processText(text:String) {
@@ -60,31 +63,31 @@ object Libby {
 
         if(inClaimFlow) {
             runDialog()
-        }
+        } else {
+            tempRef.child(prepText).addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(p0: DataSnapshot) {
 
-        tempRef.child(prepText).addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(p0: DataSnapshot) {
+                    if(p0.value == null) {
+                        sendLibbyMessage("Hmmm can't seem to find an answer for that, forwarding the request to an agent")
+                    } else if(p0.value == "claimInit"){
 
-                if(p0.value == null) {
-                    sendLibbyMessage("Hmmm can't seem to find an answer for that, forwarding the request to an agent")
-                } else if(p0.value == "claimInit"){
+                        inClaimFlow = true
 
-                    inClaimFlow = true
+                        tempRef = dbRef.child("claim")
 
-                    tempRef = dbRef.child("claim")
+                        claimFlow = prepClaimFlowDialog(tempRef)
 
-                    claimFlow = prepClaimFlowDialog(tempRef)
-
-                    sendLibbyMessage("Great! Would you please upload an image of your item?") // hardcode initial response
-                } else {
-                    sendLibbyMessage(p0.value.toString())
+                        sendLibbyMessage("Great! Would you please upload an image of your item?") // hardcode initial response
+                    } else {
+                        sendLibbyMessage(p0.value.toString())
+                    }
                 }
-            }
 
-            override fun onCancelled(p0: DatabaseError) {
-                sendLibbyMessage("Poop can't find an answer to that question.")
-            }
-        })
+                override fun onCancelled(p0: DatabaseError) {
+                    sendLibbyMessage("Poop can't find an answer to that question.")
+                }
+            })
+        }
     }
 
     fun prepClaimFlowDialog (ref : DatabaseReference) : List<String> {
@@ -100,7 +103,6 @@ object Libby {
 
             override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
                 dialogs.add(dataSnapshot.value.toString())
-                Log.i("hit1", dialogs.get(dialogs.size - 1))
             }
         })
 
