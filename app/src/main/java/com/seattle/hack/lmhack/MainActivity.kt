@@ -1,19 +1,36 @@
 package com.seattle.hack.lmhack
 
 import android.app.Activity
+import android.app.AlertDialog
+import android.app.ProgressDialog
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.widget.Button
-import android.widget.EditText
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.database.*
+import android.content.DialogInterface
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
+import android.support.annotation.NonNull
+import android.support.v4.content.ContextCompat
+import android.widget.*
+import com.google.firebase.storage.FirebaseStorage
+import java.io.File
+import com.google.firebase.storage.StorageReference
+
+
+
 
 class MainActivity : Activity() {
+
+    val PERMISSION_REQUEST_CODE = 1001
+    val PICK_IMAGE_REQUEST = 900;
 
     private var mChats: ArrayList<Message>? = null
     private var reference: DatabaseReference? = null
@@ -21,6 +38,7 @@ class MainActivity : Activity() {
     private var chatListener:ChildEventListener? = null
     lateinit var mMessageRecyclerView: RecyclerView
     private var message = ""
+    private var mStorageRef: StorageReference? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +47,7 @@ class MainActivity : Activity() {
         mChats = arrayListOf()
         val myAdapter = MessageAdapter(mChats!!, this)
 
+        mStorageRef = FirebaseStorage.getInstance().getReference();
         mLinearLayoutManager = LinearLayoutManager(this);
         mLinearLayoutManager.setStackFromEnd(true);
         mMessageRecyclerView = findViewById(R.id.reyclerview_message_list) as RecyclerView
@@ -50,7 +69,6 @@ class MainActivity : Activity() {
                 mMessageRecyclerView.smoothScrollToPosition(mChats!!.size - 1)
             }
         })
-
 
         val buttonSubmit = findViewById(R.id.button_chatbox_send) as Button
         val et_message = findViewById(R.id.edittext_chatbox) as EditText
@@ -91,5 +109,102 @@ class MainActivity : Activity() {
             et_message.setText("")
             message = ""
         }
+
+        val buttonImage = findViewById(R.id.button_chatbox_image) as ImageButton
+
+        buttonImage.setOnClickListener {
+            when {
+                (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) -> {
+                    if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE)
+                            != PackageManager.PERMISSION_GRANTED) {
+                        requestPermissions(arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE), PERMISSION_REQUEST_CODE)
+                    }else{
+                        chooseFile()
+                    }
+                }
+
+                else -> chooseFile()
+            }
+        }
     }
+
+    private fun chooseFile() {
+        val intent = Intent().apply {
+            type = "image/*"
+            action = Intent.ACTION_GET_CONTENT
+        }
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode){
+            PERMISSION_REQUEST_CODE -> {
+                if(grantResults.isEmpty() || grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                    Toast.makeText(this, "Oops! Permission Denied!!", Toast.LENGTH_SHORT).show()
+                else
+                    chooseFile()
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+        when (requestCode){
+            PICK_IMAGE_REQUEST -> {
+                uploadFile(data!!.getData())
+            }
+        }
+    }
+
+    private fun uploadFile(filePath:Uri) {
+        val progress = ProgressDialog(this).apply {
+            setTitle("Uploading Picture....")
+            setCancelable(false)
+            setCanceledOnTouchOutside(false)
+            show()
+        }
+
+        val data = FirebaseStorage.getInstance()
+        var value = 0.0
+        var storage = data.getReference().child("mypic.jpg").putFile(filePath)
+                .addOnProgressListener { taskSnapshot ->
+                    value = (100.0 * taskSnapshot.bytesTransferred) / taskSnapshot.totalByteCount
+                    Log.v("value","value=="+value)
+                    progress.setMessage("Uploaded.. " + value.toInt() + "%")
+                }
+                .addOnSuccessListener { taskSnapshot -> progress.dismiss()
+                    val uri = taskSnapshot.downloadUrl
+                    Log.v("Download File","File.." +uri);
+
+                    var temp = mutableMapOf<Any, Any>();
+
+                    temp.put("libby", false)
+                    temp.put("image", true)
+                    temp.put("time", ServerValue.TIMESTAMP)
+                    temp.put("text", uri.toString())
+
+                    val key = FirebaseDatabase.getInstance().getReference().child("chats").push().key
+                    FirebaseDatabase.getInstance().getReference().child("chats").child(key).setValue(temp)
+                            .addOnSuccessListener(OnSuccessListener<Void> {
+                                Log.i("MessageActivity", "Success")
+                            })
+                            .addOnFailureListener(OnFailureListener {
+                                Log.i("MessageActivity", "Failure")
+                            })
+
+                    mMessageRecyclerView.postDelayed(Runnable { mMessageRecyclerView.scrollToPosition(mChats!!.size - 1) }, 100)
+
+                }
+                .addOnFailureListener{
+                    exception -> exception.printStackTrace()
+
+                    Toast.makeText(this, "Upload Failed", Toast.LENGTH_SHORT).show()
+                }
+    }
+
+
 }

@@ -8,8 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import java.text.DateFormat.getTimeInstance
 import java.util.*
+import com.bumptech.glide.load.resource.bitmap.TransformationUtils.centerCrop
+import com.bumptech.glide.request.RequestOptions
+
+
 
 class MessageAdapter(private val myDataset: ArrayList<Message>, var context: Context) :
         RecyclerView.Adapter<MessageAdapter.ViewHolder>() {
@@ -69,7 +74,16 @@ class MessageAdapter(private val myDataset: ArrayList<Message>, var context: Con
             Log.i("view", "hit here")
         } else {
             val imageHolder = holder.view.findViewById(R.id.text_message_image) as ImageView
-            imageHolder.setImageBitmap(myDataset[position].imageMap)
+
+            val options = RequestOptions()
+            options.centerCrop()
+
+            Glide.with(this.context)
+                    .load(myDataset[position].text)
+                    .apply(options)
+                    .into(imageHolder);
+
+            Log.i("asdfas", "image")
         }
 
         val time = holder.view.findViewById(R.id.text_message_time) as TextView

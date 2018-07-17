@@ -85,7 +85,7 @@
         android:id="@+id/text_scroll"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="24dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="120dp"
         android:background="@drawable/rounded_rectangle_black"
@@ -95,7 +95,7 @@
         android:textColor="#ffffff"
         app:layout_constraintBottom_toBottomOf="@+id/reyclerview_message_list"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.094"
         app:layout_constraintStart_toStartOf="parent" />
 
 
