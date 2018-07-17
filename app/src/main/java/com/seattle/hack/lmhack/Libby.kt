@@ -7,9 +7,14 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ServerValue
 import com.google.firebase.ml.vision.label.FirebaseVisionLabel
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.ValueEventListener
+
+
 
 object Libby {
-    val dbRef = FirebaseStorage.getInstance().reference
+    val dbRef =  FirebaseDatabase.getInstance().reference
     var inConvoFlow:Boolean
 
     init {
@@ -23,7 +28,7 @@ object Libby {
         sendLibbyMessage("HMMM... maybe it's a " + label)
     }
 
-    fun processText(message:String) {
+    fun sendProcessConvo(message:String) {
 
     }
 
@@ -47,11 +52,17 @@ object Libby {
                 })
     }
 
-    fun sendConvoResponse(text:String) {
+    fun processText(text:String) {
 
-        
+        dbRef.child("response").child(text).addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(p0: DataSnapshot) {
+                sendLibbyMessage(p0.value.toString())
+            }
 
-
+            override fun onCancelled(p0: DatabaseError) {
+                sendLibbyMessage("Poop can't find an answer to that question.")
+            }
+        })
 
     }
 }

@@ -106,15 +106,15 @@ class MainActivity : Activity() {
                         } else {
                             Libby.processText(message)
                         }
+
+                        mMessageRecyclerView.postDelayed(Runnable { mMessageRecyclerView.scrollToPosition(mChats!!.size - 1) }, 100)
+
+                        et_message.setText("")
+                        message = ""
                     })
                     .addOnFailureListener(OnFailureListener {
                         Toast.makeText(this, "Message Failed", Toast.LENGTH_SHORT).show()
                     })
-
-            mMessageRecyclerView.postDelayed(Runnable { mMessageRecyclerView.scrollToPosition(mChats!!.size - 1) }, 100)
-
-            et_message.setText("")
-            message = ""
         }
 
         val buttonImage = findViewById(R.id.button_chatbox_image) as ImageButton
