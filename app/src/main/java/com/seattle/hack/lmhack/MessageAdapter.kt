@@ -30,7 +30,7 @@ class MessageAdapter(private val myDataset: ArrayList<Message>, var context: Con
         return if (message.libby == true) {
             // If the current user is the sender of the message
             VIEW_TYPE_MESSAGE_RECEIVED
-        } else if (message.image == true) {
+        } else if (message.image != true) {
             // If some other user sent the message
             VIEW_TYPE_MESSAGE_SENT
         } else {
@@ -65,6 +65,8 @@ class MessageAdapter(private val myDataset: ArrayList<Message>, var context: Con
         if(viewType == 1 || viewType == 2) {
             val text = holder.view.findViewById(R.id.text_message_body) as TextView
             text.text = myDataset[position].text
+
+            Log.i("view", "hit here")
         } else {
             val imageHolder = holder.view.findViewById(R.id.text_message_image) as ImageView
             imageHolder.setImageBitmap(myDataset[position].imageMap)
