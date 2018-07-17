@@ -58,9 +58,15 @@ object Libby {
 
     fun processText(text:String) {
 
+        var tempRef = dbRef.child("response")
+
+        if(inConvoFlow) {
+            tempRef = convoRef
+        }
+
         Log.i("convo", inConvoFlow.toString())
-        
-        dbRef.child("response").child(text).addValueEventListener(object : ValueEventListener {
+
+        tempRef.child(text).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
                 sendLibbyMessage(p0.value.toString())
                 Log.i("adsf", p0.toString())
