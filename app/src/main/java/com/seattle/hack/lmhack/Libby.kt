@@ -53,10 +53,10 @@ object Libby {
     }
 
     fun processText(text:String) {
-
         dbRef.child("response").child(text).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
                 sendLibbyMessage(p0.value.toString())
+                
             }
 
             override fun onCancelled(p0: DatabaseError) {
