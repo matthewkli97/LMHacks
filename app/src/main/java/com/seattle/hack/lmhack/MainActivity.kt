@@ -100,7 +100,12 @@ class MainActivity : Activity() {
             val key = FirebaseDatabase.getInstance().getReference().child("chats").push().key
             FirebaseDatabase.getInstance().getReference().child("chats").child(key!!).setValue(temp)
                     .addOnSuccessListener(OnSuccessListener<Void> {
-                        Libby.processText(message)
+
+                        if(Libby.inConvoFlow) {
+                            Libby.sendProcessConvo(message)
+                        } else {
+                            Libby.processText(message)
+                        }
                     })
                     .addOnFailureListener(OnFailureListener {
                         Toast.makeText(this, "Message Failed", Toast.LENGTH_SHORT).show()

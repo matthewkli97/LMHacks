@@ -6,11 +6,14 @@ import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ServerValue
 import com.google.firebase.ml.vision.label.FirebaseVisionLabel
+import com.google.firebase.storage.FirebaseStorage
 
 object Libby {
+    val dbRef = FirebaseStorage.getInstance().reference
+    var inConvoFlow:Boolean
 
     init {
-
+        inConvoFlow = false
     }
 
     fun processImageLabels(labels: List<FirebaseVisionLabel>) {
@@ -42,5 +45,13 @@ object Libby {
                 .addOnFailureListener(OnFailureListener {
                     Log.i("MessageActivity", "Failure")
                 })
+    }
+
+    fun sendConvoResponse(text:String) {
+
+        
+
+
+
     }
 }

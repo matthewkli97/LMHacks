@@ -16,9 +16,6 @@ import com.bumptech.glide.request.RequestOptions
 import android.graphics.Bitmap
 
 
-
-
-
 class MessageAdapter(private val myDataset: ArrayList<Message>, var context: Context) :
         RecyclerView.Adapter<MessageAdapter.ViewHolder>() {
 
