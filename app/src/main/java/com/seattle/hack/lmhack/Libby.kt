@@ -16,6 +16,7 @@ import com.google.firebase.database.ValueEventListener
 object Libby {
     val dbRef =  FirebaseDatabase.getInstance().reference
     var inConvoFlow:Boolean
+    var convoRef = dbRef
 
     init {
         inConvoFlow = false
@@ -25,7 +26,10 @@ object Libby {
         val label = labels[0].label
         val confidence = labels[0].confidence
 
-        sendLibbyMessage("HMMM... maybe it's a " + label)
+        convoRef = dbRef.child("label")
+
+        inConvoFlow = true
+
     }
 
     fun sendProcessConvo(message:String) {
@@ -53,6 +57,9 @@ object Libby {
     }
 
     fun processText(text:String) {
+
+        Log.i("convo", inConvoFlow.toString())
+        
         dbRef.child("response").child(text).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
                 sendLibbyMessage(p0.value.toString())
