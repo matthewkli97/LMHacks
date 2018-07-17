@@ -13,11 +13,15 @@ object Libby {
 
     }
 
-    fun sendIdentifier(labels: List<FirebaseVisionLabel>) {
+    fun processImageLabels(labels: List<FirebaseVisionLabel>) {
         val label = labels[0].label
         val confidence = labels[0].confidence
 
         sendLibbyMessage("HMMM... maybe it's a " + label)
+    }
+
+    fun processText(message:String) {
+
     }
 
     fun sendLibbyMessage(text:String) {

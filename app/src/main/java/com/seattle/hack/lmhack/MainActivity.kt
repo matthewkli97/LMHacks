@@ -203,6 +203,8 @@ class MainActivity : Activity() {
                             Log.i("imageLabel", entityId)
                             Log.i("imageLabel", confidence.toString())
                         })
+
+                        Libby.processImageLabels(labels)
                     }
                     .addOnFailureListener{}
         } catch (e:IOException) {
