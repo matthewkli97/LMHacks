@@ -101,11 +101,8 @@ class MainActivity : Activity() {
             FirebaseDatabase.getInstance().getReference().child("chats").child(key!!).setValue(temp)
                     .addOnSuccessListener(OnSuccessListener<Void> {
 
-                        if(Libby.inConvoFlow) {
-                            Libby.sendProcessConvo(message)
-                        } else {
-                            Libby.processText(message)
-                        }
+                        Libby.processText(message)
+
 
                         mMessageRecyclerView.postDelayed(Runnable { mMessageRecyclerView.scrollToPosition(mChats!!.size - 1) }, 100)
 

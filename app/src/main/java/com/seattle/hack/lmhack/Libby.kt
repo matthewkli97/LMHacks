@@ -32,10 +32,6 @@ object Libby {
 
     }
 
-    fun sendProcessConvo(message:String) {
-
-    }
-
     fun sendLibbyMessage(text:String) {
 
         val key = FirebaseDatabase.getInstance().getReference().child("chats").push().key
@@ -68,8 +64,13 @@ object Libby {
 
         tempRef.child(text).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
-                sendLibbyMessage(p0.value.toString())
-                Log.i("adsf", p0.toString())
+
+                if(p0.value == null) {
+                    sendLibbyMessage("Poop can't find an answer to that question.")
+                } else {
+                    sendLibbyMessage(p0.value.toString())
+                    Log.i("adsf", p0.toString())
+                }
             }
 
             override fun onCancelled(p0: DatabaseError) {
