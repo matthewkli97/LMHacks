@@ -67,6 +67,8 @@ object Libby {
 
                     inClaimFlow = true
 
+                    tempRef = dbRef.child("claim")
+
                     claimFlow = prepClaimFlowDialog(tempRef)
 
                     sendLibbyMessage("Great! Would you please upload an image of your item?") // hardcode initial response

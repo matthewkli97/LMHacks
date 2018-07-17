@@ -97,8 +97,8 @@ class MainActivity : Activity() {
             temp.put("time", ServerValue.TIMESTAMP)
             temp.put("text", message)
 
-            val key = FirebaseDatabase.getInstance().getReference().child("chats").push().key
-            FirebaseDatabase.getInstance().getReference().child("chats").child(key!!).setValue(temp)
+            val key = FirebaseDatabase.getInstance().getReference().child("claim").push().key
+            FirebaseDatabase.getInstance().getReference().child("claim").child(key!!).setValue(temp)
                     .addOnSuccessListener(OnSuccessListener<Void> {
 
                         Libby.processText(message)
