@@ -56,17 +56,19 @@ object Libby {
 
         var tempRef = dbRef.child("response")
 
+        val prepText = text.trim().toLowerCase()
+
         if(inClaimFlow) {
             tempRef = convoRef
         }
 
         Log.i("convo", inClaimFlow.toString())
 
-        tempRef.child(text).addValueEventListener(object : ValueEventListener {
+        tempRef.child(prepText).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
 
                 if(p0.value == null) {
-                    sendLibbyMessage("Poop can't find an answer to that question.")
+                    sendLibbyMessage("Hmmm can't seem to find an answer for that, forwarding the request to an agent")
                 } else {
                     sendLibbyMessage(p0.value.toString())
                     Log.i("adsf", p0.toString())
