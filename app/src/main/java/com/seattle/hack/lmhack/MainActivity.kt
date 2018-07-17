@@ -184,11 +184,6 @@ class MainActivity : Activity() {
         }
     }
 
-    private fun processFile(filePath: Uri) {
-        uploadImage(filePath)
-        labelImage(filePath)
-    }
-
     private fun labelImage(filePath:Uri) {
         var image:FirebaseVisionImage
         try {
@@ -198,6 +193,7 @@ class MainActivity : Activity() {
 
             var result = detector.detectInImage(image)
                     .addOnSuccessListener {labels ->
+
                         labels.forEach({
                             var text = it.getLabel();
                             var entityId = it.getEntityId();
@@ -214,7 +210,7 @@ class MainActivity : Activity() {
         }
     }
 
-    private fun uploadImage(filePath:Uri) {
+    private fun processFile(filePath:Uri) {
         val progress = ProgressDialog(this).apply {
             setTitle("Uploading Picture....")
             setCancelable(false)
@@ -251,6 +247,8 @@ class MainActivity : Activity() {
 
 
                         mMessageRecyclerView.postDelayed(Runnable { mMessageRecyclerView.scrollToPosition(mChats!!.size - 1) }, 100)
+
+                        labelImage(filePath) // Daisy Chaining required due to async nature of firebase :(
                     }
                 }
                 .addOnFailureListener{
