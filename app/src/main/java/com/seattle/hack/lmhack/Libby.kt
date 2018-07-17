@@ -53,6 +53,10 @@ object Libby {
     fun runDialog() {
         sendLibbyMessage(claimFlow.get(index));
         index++;
+
+        if(index >= claimFlow.size) {
+            inClaimFlow = false
+        }
     }
 
     fun processText(text:String) {
@@ -102,7 +106,7 @@ object Libby {
             override fun onChildRemoved(p0: DataSnapshot) {}
 
             override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
-                dialogs.add(dataSnapshot.value.toString())
+                dialogs.add(dataSnapshot.child("text").value.toString())
             }
         })
 
