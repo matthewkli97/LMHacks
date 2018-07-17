@@ -54,15 +54,18 @@ object Libby {
 
         if(index >= claimFlow.size) {
             inClaimFlow = false
+            index = 0
         }
     }
 
     fun determineDialogFlow (labels: List<FirebaseVisionLabel>) {
+        Log.i("asdf", labels.get(0).label.toString())
         var tempRef = dbRef.child("claim").child(labels.get(0).label.toString())
+
         claimFlow = prepClaimFlowDialog(tempRef)
         inClaimFlow = true
         inInitFlow = false;
-        runDialog()
+        
     }
 
     fun processText(text:String) {
@@ -82,8 +85,6 @@ object Libby {
                     } else if(p0.value.toString().contains("claimInit")){
 
                         inInitFlow = true;
-
-                        tempRef = dbRef.child("claim").child(p0.value.toString())
 
                         sendLibbyMessage("Please upload an image to start a claim.")
                     } else {
@@ -112,7 +113,7 @@ object Libby {
 
             override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
                 dialogs.add(dataSnapshot.child("text").value.toString())
-                Log.i("asdf", dataSnapshot.child("text").value.toString())
+                Log.i("asdf", dataSnapshot.toString())
             }
         })
 
