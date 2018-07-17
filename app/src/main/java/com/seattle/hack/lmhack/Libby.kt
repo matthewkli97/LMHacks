@@ -48,13 +48,19 @@ object Libby {
                 })
     }
 
+    fun runDialog() {
+        
+    }
+
     fun processText(text:String) {
 
         var tempRef = dbRef.child("response")
 
         val prepText = text.trim().toLowerCase().replace(".", "")
 
-        Log.i("isIN", inClaimFlow.toString())
+        if(inClaimFlow) {
+            runDialog()
+        }
 
         tempRef.child(prepText).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
