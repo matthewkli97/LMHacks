@@ -74,11 +74,13 @@ object Libby {
 
                         inClaimFlow = true
 
-                        tempRef = dbRef.child("claim")
+                        tempRef = dbRef.child("claim").child(p0.value.toString())
 
                         claimFlow = prepClaimFlowDialog(tempRef)
 
-                        sendLibbyMessage("Great! Would you please upload an image of your item?") // hardcode initial response
+                        Log.i("temp", tempRef.toString());
+
+                        runDialog()
                     } else {
                         sendLibbyMessage(p0.value.toString())
                     }
