@@ -19,6 +19,7 @@ import android.net.Uri
 import android.os.Build
 import android.support.annotation.NonNull
 import android.support.v4.content.ContextCompat
+import android.view.View
 import android.widget.*
 import com.google.firebase.storage.FirebaseStorage
 import java.io.File
@@ -126,6 +127,27 @@ class MainActivity : Activity() {
                 else -> chooseFile()
             }
         }
+
+        val scrollDown = findViewById(R.id.text_scroll) as TextView
+        scrollDown.visibility = View.INVISIBLE
+
+        scrollDown.setOnClickListener { view ->
+            scrollDown.visibility = View.INVISIBLE
+            mMessageRecyclerView.postDelayed(Runnable { mMessageRecyclerView.scrollToPosition(mChats!!.size -1) }, 100)
+        }
+
+        mMessageRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+
+                //Log.i("track", "" + mLinearLayoutManager.findLastCompletelyVisibleItemPosition())
+                if(mLinearLayoutManager.findLastCompletelyVisibleItemPosition() <= mChats!!.size - 5) {
+                    scrollDown.visibility = View.VISIBLE
+                } else {
+                    scrollDown.visibility = View.INVISIBLE
+                }
+            }
+        })
     }
 
     private fun chooseFile() {
@@ -204,5 +226,5 @@ class MainActivity : Activity() {
 
                     Toast.makeText(this, "Upload Failed", Toast.LENGTH_SHORT).show()
                 }
-    } 
+    }
 }
