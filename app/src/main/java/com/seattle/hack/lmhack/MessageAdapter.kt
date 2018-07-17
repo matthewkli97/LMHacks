@@ -76,12 +76,15 @@ class MessageAdapter(private val myDataset: ArrayList<Message>, var context: Con
             val imageHolder = holder.view.findViewById(R.id.text_message_image) as ImageView
 
             val options = RequestOptions()
-            options.centerCrop()
+            options.fitCenter()
 
             Glide.with(this.context)
                     .load(myDataset[position].text)
                     .apply(options)
                     .into(imageHolder);
+
+
+            val maxSize = imageHolder.getWidth();
 
             Log.i("asdfas", "image")
         }

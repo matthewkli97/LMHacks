@@ -16,6 +16,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:maxWidth="240dp"
+        android:minWidth="200dp"
+        android:maxHeight="240dp"
         android:padding="8dp"
         android:textColor="#000000"
         android:layout_marginRight="8dp"
@@ -31,7 +33,7 @@
         android:text="11:40"
         android:textSize="10sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_message_body" />
+        app:layout_constraintTop_toBottomOf="@+id/text_message_image" />
 
 
 

@@ -204,7 +204,5 @@ class MainActivity : Activity() {
 
                     Toast.makeText(this, "Upload Failed", Toast.LENGTH_SHORT).show()
                 }
-    }
-
-
+    } 
 }
