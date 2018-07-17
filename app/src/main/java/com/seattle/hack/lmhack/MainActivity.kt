@@ -100,12 +100,11 @@ class MainActivity : Activity() {
             val key = FirebaseDatabase.getInstance().getReference().child("chats").push().key
             FirebaseDatabase.getInstance().getReference().child("chats").child(key!!).setValue(temp)
                     .addOnSuccessListener(OnSuccessListener<Void> {
-                        Log.i("MessageActivity", "Success")
+                        Libby.processText(message)
                     })
                     .addOnFailureListener(OnFailureListener {
-                        Log.i("MessageActivity", "Failure")
+                        Toast.makeText(this, "Message Failed", Toast.LENGTH_SHORT).show()
                     })
-
 
             mMessageRecyclerView.postDelayed(Runnable { mMessageRecyclerView.scrollToPosition(mChats!!.size - 1) }, 100)
 
@@ -121,7 +120,7 @@ class MainActivity : Activity() {
                     if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE)
                             != PackageManager.PERMISSION_GRANTED) {
                         requestPermissions(arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE), PERMISSION_REQUEST_CODE)
-                    }else{
+                    } else{
                         chooseFile()
                     }
                 }
