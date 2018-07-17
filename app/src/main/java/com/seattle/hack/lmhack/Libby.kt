@@ -26,7 +26,7 @@ object Libby {
         val label = labels[0].label
         val confidence = labels[0].confidence
 
-        convoRef = dbRef.child("label")
+        convoRef = dbRef.child("label").child(label)
 
         inConvoFlow = true
 
