@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "162746689108",
+    "firebase_url": "https://lmhackdb.firebaseio.com",
+    "project_id": "lmhackdb",
+    "storage_bucket": "lmhackdb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:162746689108:android:0d22b2eda3fd8a00",
+        "android_client_info": {
+          "package_name": "com.seattle.hack.lmhack"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "162746689108-9n7st4megcvjr7liktdqaokqrbactblo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.seattle.hack.lmhack",
+            "certificate_hash": "27ec45515dee05579264cd38c550baad936a407a"
+          }
+        },
+        {
+          "client_id": "162746689108-cl8dgsf0p0dmu1er464ma7cb1oa0ooic.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALGWckAJZu0SLi-zab7e1UkW-P14Ep8q8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "162746689108-cl8dgsf0p0dmu1er464ma7cb1oa0ooic.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
