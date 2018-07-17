@@ -20,7 +20,6 @@ object Libby {
     }
 
     fun processImageLabels(labels: List<FirebaseVisionLabel>) {
-
         if(inClaimFlow) {
             runDialog()
         } else {
