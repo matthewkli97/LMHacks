@@ -52,11 +52,9 @@ object Libby {
 
         var tempRef = dbRef.child("response")
 
-        val prepText = text.trim().toLowerCase()
+        val prepText = text.trim().toLowerCase().replace(".", "")
 
-        if(inClaimFlow) {
-            tempRef = dbRef.child("claim")
-        }
+        Log.i("isIN", inClaimFlow.toString())
 
         tempRef.child(prepText).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
@@ -86,7 +84,9 @@ object Libby {
     fun prepClaimFlowDialog (ref : DatabaseReference) : List<String> {
         var dialogs = mutableListOf<String>()
 
-        ref.addChildEventListener(object : ChildEventListener {
+        val referenceQuery: Query = ref.orderByChild("time")
+
+        referenceQuery.addChildEventListener(object : ChildEventListener {
             override fun onCancelled(p0: DatabaseError) {}
             override fun onChildMoved(p0: DataSnapshot, p1: String?) {}
             override fun onChildChanged(p0: DataSnapshot, p1: String?) {}

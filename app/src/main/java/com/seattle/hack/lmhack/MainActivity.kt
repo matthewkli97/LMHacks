@@ -97,12 +97,13 @@ class MainActivity : Activity() {
             temp.put("time", ServerValue.TIMESTAMP)
             temp.put("text", message)
 
-            val key = FirebaseDatabase.getInstance().getReference().child("claim").push().key
-            FirebaseDatabase.getInstance().getReference().child("claim").child(key!!).setValue(temp)
+//            temp.put("text", message)
+//            temp.put("time", ServerValue.TIMESTAMP)
+            val key = FirebaseDatabase.getInstance().getReference().child("chats").push().key
+            FirebaseDatabase.getInstance().getReference().child("chats").child(key!!).setValue(temp)
                     .addOnSuccessListener(OnSuccessListener<Void> {
 
                         Libby.processText(message)
-
 
                         mMessageRecyclerView.postDelayed(Runnable { mMessageRecyclerView.scrollToPosition(mChats!!.size - 1) }, 100)
 
