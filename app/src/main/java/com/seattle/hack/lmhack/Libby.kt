@@ -3,20 +3,16 @@ package com.seattle.hack.lmhack
 import android.util.Log
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ServerValue
+import com.google.firebase.database.*
 import com.google.firebase.ml.vision.label.FirebaseVisionLabel
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.ValueEventListener
-
 
 
 object Libby {
     val dbRef =  FirebaseDatabase.getInstance().reference
     var inClaimFlow:Boolean
     var convoRef = dbRef
+    var claimFlow: List<String> = mutableListOf()
 
     init {
         inClaimFlow = false
@@ -59,19 +55,23 @@ object Libby {
         val prepText = text.trim().toLowerCase()
 
         if(inClaimFlow) {
-            tempRef = convoRef
+            tempRef = dbRef.child("claim")
         }
-
-        Log.i("convo", inClaimFlow.toString())
 
         tempRef.child(prepText).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
 
                 if(p0.value == null) {
                     sendLibbyMessage("Hmmm can't seem to find an answer for that, forwarding the request to an agent")
+                } else if(p0.value == "claimInit"){
+
+                    inClaimFlow = true
+
+                    claimFlow = prepClaimFlowDialog(tempRef)
+
+                    sendLibbyMessage("Great! Would you please upload an image of your item?") // hardcode initial response
                 } else {
                     sendLibbyMessage(p0.value.toString())
-                    Log.i("adsf", p0.toString())
                 }
             }
 
@@ -79,6 +79,23 @@ object Libby {
                 sendLibbyMessage("Poop can't find an answer to that question.")
             }
         })
+    }
 
+    fun prepClaimFlowDialog (ref : DatabaseReference) : List<String> {
+        var dialogs = mutableListOf<String>()
+
+        ref.addChildEventListener(object : ChildEventListener {
+            override fun onCancelled(p0: DatabaseError) {}
+            override fun onChildMoved(p0: DataSnapshot, p1: String?) {}
+            override fun onChildChanged(p0: DataSnapshot, p1: String?) {}
+            override fun onChildRemoved(p0: DataSnapshot) {}
+
+            override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
+                dialogs.add(dataSnapshot.value.toString())
+                Log.i("hit1", dialogs.get(dialogs.size - 1))
+            }
+        })
+
+        return dialogs
     }
 }
