@@ -21,11 +21,11 @@ import android.support.annotation.NonNull
 import android.support.v4.content.ContextCompat
 import android.view.View
 import android.widget.*
+import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.firebase.storage.FirebaseStorage
 import java.io.File
 import com.google.firebase.storage.StorageReference
-
-
+import java.io.IOException
 
 
 class MainActivity : Activity() {
@@ -226,5 +226,13 @@ class MainActivity : Activity() {
 
                     Toast.makeText(this, "Upload Failed", Toast.LENGTH_SHORT).show()
                 }
+
+        var image:FirebaseVisionImage
+        try {
+            image = FirebaseVisionImage.fromFilePath(this, filePath);
+        } catch (e:IOException) {
+            e.printStackTrace();
+        }
     }
+
 }

@@ -87,12 +87,6 @@ class MessageAdapter(private val myDataset: ArrayList<Message>, var context: Con
                     .into(imageHolder);
 
             val theBitmap = Glide.with(this.context).load(myDataset[position].text).into(-1, -1)
-            Log.i("asd", theBitmap.toString())
-
-
-            val maxSize = imageHolder.getWidth();
-
-            Log.i("asdfas", "image")
         }
 
         val time = holder.view.findViewById(R.id.text_message_time) as TextView
