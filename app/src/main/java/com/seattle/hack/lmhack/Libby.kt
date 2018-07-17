@@ -9,11 +9,13 @@ import com.google.firebase.ml.vision.label.FirebaseVisionLabel
 object Libby {
     val dbRef =  FirebaseDatabase.getInstance().reference
     var inClaimFlow:Boolean
+    var inInitFlow:Boolean
     var convoRef = dbRef
     var claimFlow: List<String> = mutableListOf()
     var index = 0;
 
     init {
+        inInitFlow = false
         inClaimFlow = false
     }
 
@@ -22,7 +24,6 @@ object Libby {
             runDialog()
         } else {
             val label = labels[0].label
-
             convoRef = dbRef.child("label").child(label)
         }
     }
@@ -56,6 +57,14 @@ object Libby {
         }
     }
 
+    fun determineDialogFlow (labels: List<FirebaseVisionLabel>) {
+        var tempRef = dbRef.child("claim").child(labels.get(0).label.toString())
+        claimFlow = prepClaimFlowDialog(tempRef)
+        inClaimFlow = true
+        inInitFlow = false;
+        runDialog()
+    }
+
     fun processText(text:String) {
 
         var tempRef = dbRef.child("response")
@@ -72,15 +81,11 @@ object Libby {
                         sendLibbyMessage("Hmmm can't seem to find an answer for that, forwarding the request to an agent")
                     } else if(p0.value.toString().contains("claimInit")){
 
-                        inClaimFlow = true
+                        inInitFlow = true;
 
                         tempRef = dbRef.child("claim").child(p0.value.toString())
 
-                        claimFlow = prepClaimFlowDialog(tempRef)
-
-                        Log.i("temp", tempRef.toString());
-
-                        runDialog()
+                        sendLibbyMessage("Please upload an image to start a claim.")
                     } else {
                         sendLibbyMessage(p0.value.toString())
                     }
@@ -97,6 +102,7 @@ object Libby {
         var dialogs = mutableListOf<String>()
 
         val referenceQuery: Query = ref.orderByChild("time")
+        Log.i("reference", ref.toString())
 
         referenceQuery.addChildEventListener(object : ChildEventListener {
             override fun onCancelled(p0: DatabaseError) {}
@@ -106,6 +112,7 @@ object Libby {
 
             override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
                 dialogs.add(dataSnapshot.child("text").value.toString())
+                Log.i("asdf", dataSnapshot.child("text").value.toString())
             }
         })
 

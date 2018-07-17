@@ -202,7 +202,11 @@ class MainActivity : Activity() {
                             Log.i("imageLabel", confidence.toString())
                         })
 
-                        Libby.processImageLabels(labels)
+                        if(Libby.inInitFlow) {
+                            Libby.determineDialogFlow(labels)
+                        } else {
+                            Libby.processImageLabels(labels)
+                        }
                     }
                     .addOnFailureListener{}
         } catch (e:IOException) {
