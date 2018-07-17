@@ -70,7 +70,7 @@ object Libby {
 
                     if(p0.value == null) {
                         sendLibbyMessage("Hmmm can't seem to find an answer for that, forwarding the request to an agent")
-                    } else if(p0.value == "claimInit"){
+                    } else if(p0.value.toString().contains("claimInit")){
 
                         inClaimFlow = true
 
