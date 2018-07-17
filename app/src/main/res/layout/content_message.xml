@@ -55,17 +55,29 @@
             android:hint="Enter message"
             android:maxLines="6" />
 
+
+        <ImageButton
+            android:id="@+id/button_chatbox_image"
+            android:layout_width="64dp"
+            android:layout_height="48dp"
+            android:layout_gravity="bottom"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:text="SEND"
+            android:src="@drawable/ic_image_black_24dp"
+            android:textSize="14sp" />
+
         <Button
             android:id="@+id/button_chatbox_send"
             android:layout_width="64dp"
             android:layout_height="48dp"
             android:layout_gravity="bottom"
-            android:background="?attr/selectableItemBackground"
             android:clickable="true"
+            android:focusable="true"
             android:gravity="center"
             android:text="SEND"
-            android:textSize="14dp" />
-
+            android:textSize="14sp" />
 
     </LinearLayout>
 
