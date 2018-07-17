@@ -15,11 +15,11 @@ import com.google.firebase.database.ValueEventListener
 
 object Libby {
     val dbRef =  FirebaseDatabase.getInstance().reference
-    var inConvoFlow:Boolean
+    var inClaimFlow:Boolean
     var convoRef = dbRef
 
     init {
-        inConvoFlow = false
+        inClaimFlow = false
     }
 
     fun processImageLabels(labels: List<FirebaseVisionLabel>) {
@@ -28,7 +28,7 @@ object Libby {
 
         convoRef = dbRef.child("label").child(label)
 
-        inConvoFlow = true
+        inClaimFlow = true
 
     }
 
@@ -56,11 +56,11 @@ object Libby {
 
         var tempRef = dbRef.child("response")
 
-        if(inConvoFlow) {
+        if(inClaimFlow) {
             tempRef = convoRef
         }
 
-        Log.i("convo", inConvoFlow.toString())
+        Log.i("convo", inClaimFlow.toString())
 
         tempRef.child(text).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
