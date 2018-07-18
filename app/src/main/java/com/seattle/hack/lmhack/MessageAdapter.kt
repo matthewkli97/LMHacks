@@ -58,8 +58,10 @@ class MessageAdapter(private val myDataset: ArrayList<Message>, var context: Con
             view = LayoutInflater.from(parent.context).inflate(R.layout.item_message_sent, parent, false)
         } else if(viewType == VIEW_TYPE_MESSAGE_SENT_IMAGE){
             view = LayoutInflater.from(parent.context).inflate(R.layout.item_message_sent_image, parent, false)
-        } else {
+        } else if(viewType == VIEW_TYPE_MESSAGE_RECEIVED){
             view = LayoutInflater.from(parent.context).inflate(R.layout.item_message_received, parent, false)
+        } else {
+            view = LayoutInflater.from(parent.context).inflate(R.layout.item_message_received_image, parent, false)
         }
         // set the view's size, margins, paddings and layout parameters
 

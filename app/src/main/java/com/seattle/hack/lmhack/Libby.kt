@@ -81,6 +81,8 @@ object Libby {
         if(index >= claimFlow.size) {
             inClaimFlow = false
             index = 0
+        } else if(claimFlow.get(index - 1).contains("See Image")) {
+            runDialog()
         }
     }
 
