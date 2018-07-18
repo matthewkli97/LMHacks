@@ -262,13 +262,3 @@ class MainActivity : Activity() {
 }
 
 
-/*
-    fun matchSentence() {
-    double acceptanceRate = .4;
-    List<String> matches = new ArrayList<String<(); // Contains the sentences that matched more than acceptanceRate %
-    
-
-    }
-
-
- */

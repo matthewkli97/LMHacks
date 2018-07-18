@@ -148,3 +148,16 @@ object Libby {
         return dialogs
     }
 }
+
+/*
+    fun matchSentence() {
+    double acceptanceRate = .4;
+    List<String> matches = new ArrayList<String<(); // Contains the sentences that matched more than acceptanceRate %
+    Map<String, String> sentenceToResponse = new Map<String, String>(); // Maps the sentence to the correct response
+    Map<String, int> wordCount = new Map<String, int>(); // Maps the sentence to the number of words that matched the input (initially, all set to 0)
+
+
+    }
+
+
+ */
