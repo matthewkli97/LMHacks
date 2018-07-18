@@ -26,17 +26,20 @@ class MessageAdapter(private val myDataset: ArrayList<Message>, var context: Con
     private val VIEW_TYPE_MESSAGE_SENT = 1
     private val VIEW_TYPE_MESSAGE_RECEIVED = 2
     private val VIEW_TYPE_MESSAGE_SENT_IMAGE = 3
+    private val VIEW_TYPE_MESSAGE_RECEIVED_IMAGE = 4
 
 
     override fun getItemViewType(position: Int): Int {
         val message = myDataset.get(position)
 
         // replace "position % 2 == 0"  with: message.userId.equals(FirebaseAuth.getInstance().uid)
-        return if (message.libby == true) {
+        return if (message.libby == true && message.image == false) {
             // If the current user is the sender of the message
             VIEW_TYPE_MESSAGE_RECEIVED
-        } else if (message.image != true) {
+        } else if (message.libby == true && message.image == true) {
             // If some other user sent the message
+            VIEW_TYPE_MESSAGE_RECEIVED_IMAGE
+        } else if(message.libby == false && message.image == false){
             VIEW_TYPE_MESSAGE_SENT
         } else {
             VIEW_TYPE_MESSAGE_SENT_IMAGE

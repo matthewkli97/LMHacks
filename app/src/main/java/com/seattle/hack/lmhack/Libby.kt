@@ -48,6 +48,26 @@ object Libby {
                 })
     }
 
+    fun sendLibbyImageMessage(text:String) {
+
+        val key = FirebaseDatabase.getInstance().getReference().child("chats").push().key
+
+        var temp = mutableMapOf<Any, Any>();
+
+        temp.put("libby", true)
+        temp.put("image", true)
+        temp.put("time", ServerValue.TIMESTAMP)
+        temp.put("text", text)
+
+        FirebaseDatabase.getInstance().getReference().child("chats").child(key!!).setValue(temp)
+                .addOnSuccessListener(OnSuccessListener<Void> {
+                    Log.i("MessageActivity", "Success")
+                })
+                .addOnFailureListener(OnFailureListener {
+                    Log.i("MessageActivity", "Failure")
+                })
+    }
+
     fun runDialog() {
 
         if(claimFlow.get(index).contains("http")) {
@@ -55,7 +75,7 @@ object Libby {
         } else {
             sendLibbyMessage(claimFlow.get(index));
         }
-        
+
         index++;
 
         if(index >= claimFlow.size) {
