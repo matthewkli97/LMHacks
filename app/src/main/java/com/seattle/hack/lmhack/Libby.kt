@@ -18,13 +18,14 @@ object Libby {
         inClaimFlow = false
     }
 
+
     fun processImageLabels(labels: List<FirebaseVisionLabel>) {
         if(inClaimFlow) {
             runDialog()
         } else {
             val label = labels[0].label
 
-            sendLibbyMessage("We classified this as " + label + ". Start a claim by typing 'create claim'.") 
+            sendLibbyMessage("We classified this as " + label + ". Start a claim by typing 'create claim'.")
         }
     }
 
