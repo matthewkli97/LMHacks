@@ -202,7 +202,7 @@ class MainActivity : Activity() {
 
                         if(Libby.inInitFlow) {
                             Libby.determineDialogFlow(labels)
-                        } else {
+                        } else  {
                             Libby.processImageLabels(labels)
                         }
                     }

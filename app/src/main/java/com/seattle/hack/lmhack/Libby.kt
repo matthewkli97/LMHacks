@@ -10,7 +10,6 @@ object Libby {
     val dbRef =  FirebaseDatabase.getInstance().reference
     var inClaimFlow:Boolean
     var inInitFlow:Boolean
-    var convoRef = dbRef
     var claimFlow: List<String> = mutableListOf()
     var index = 0;
 
@@ -24,7 +23,8 @@ object Libby {
             runDialog()
         } else {
             val label = labels[0].label
-            convoRef = dbRef.child("label").child(label)
+
+            sendLibbyMessage("We classified this as " + label + ". Start a claim by typing 'create claim'.") 
         }
     }
 
@@ -155,9 +155,5 @@ object Libby {
     List<String> matches = new ArrayList<String<(); // Contains the sentences that matched more than acceptanceRate %
     Map<String, String> sentenceToResponse = new Map<String, String>(); // Maps the sentence to the correct response
     Map<String, int> wordCount = new Map<String, int>(); // Maps the sentence to the number of words that matched the input (initially, all set to 0)
-
-
     }
-
-
  */
