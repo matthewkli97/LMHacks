@@ -104,7 +104,11 @@ object Libby {
 
         val prepText = text.trim().toLowerCase().replace(".", "")
 
-        if(inClaimFlow) {
+        if(prepText == "cancel" && inClaimFlow) {
+            inClaimFlow = false
+            index = 0
+            sendLibbyMessage("Claim canceled.")
+        } else if(inClaimFlow) {
             runDialog()
         } else {
             tempRef.child(prepText).addValueEventListener(object : ValueEventListener {
