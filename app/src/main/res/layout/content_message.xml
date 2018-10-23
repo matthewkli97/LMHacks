@@ -55,17 +55,29 @@
             android:hint="Enter message"
             android:maxLines="6" />
 
+
+        <ImageButton
+            android:id="@+id/button_chatbox_image"
+            android:layout_width="64dp"
+            android:layout_height="48dp"
+            android:layout_gravity="bottom"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:text="SEND"
+            android:src="@drawable/ic_image_black_24dp"
+            android:textSize="14sp" />
+
         <Button
             android:id="@+id/button_chatbox_send"
             android:layout_width="64dp"
             android:layout_height="48dp"
             android:layout_gravity="bottom"
-            android:background="?attr/selectableItemBackground"
             android:clickable="true"
+            android:focusable="true"
             android:gravity="center"
             android:text="SEND"
-            android:textSize="14dp" />
-
+            android:textSize="14sp" />
 
     </LinearLayout>
 
@@ -73,7 +85,7 @@
         android:id="@+id/text_scroll"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="24dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="120dp"
         android:background="@drawable/rounded_rectangle_black"
@@ -83,7 +95,7 @@
         android:textColor="#ffffff"
         app:layout_constraintBottom_toBottomOf="@+id/reyclerview_message_list"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.094"
         app:layout_constraintStart_toStartOf="parent" />
 
 
